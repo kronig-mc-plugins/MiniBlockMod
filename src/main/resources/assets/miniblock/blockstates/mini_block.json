@@ -1,0 +1,7 @@
+{
+  "variants": {
+    "": {
+      "model": "miniblock:block/mini_block"
+    }
+  }
+}

@@ -1,0 +1,7 @@
+{
+  "type": "minecraft:function",
+  "environment": "minecraft:default",
+  "function": "miniblock:miniature_player_can_grow_only_when_current_pose_fits",
+  "max_ticks": 100,
+  "structure": "miniblock:empty_3x3x3"
+}

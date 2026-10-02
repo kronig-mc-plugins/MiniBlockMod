@@ -1,0 +1,7 @@
+{
+  "type": "minecraft:function",
+  "environment": "minecraft:default",
+  "function": "miniblock:changed_microcell_updates_attached_torch",
+  "max_ticks": 100,
+  "structure": "miniblock:empty_3x3x3"
+}

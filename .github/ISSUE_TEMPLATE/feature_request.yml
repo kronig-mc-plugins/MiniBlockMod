@@ -1,0 +1,19 @@
+name: Idee vorschlagen
+description: Schlage eine neue Funktion oder Verbesserung vor.
+title: '[Idee] '
+labels: [enhancement]
+body:
+  - type: textarea
+    id: goal
+    attributes:
+      label: Gewünschtes Spielverhalten
+      description: Was möchtest du damit bauen oder tun?
+    validations:
+      required: true
+  - type: textarea
+    id: proposal
+    attributes:
+      label: Vorschlag
+      description: Beschreibe die Funktion und mögliche Bedienung.
+    validations:
+      required: true

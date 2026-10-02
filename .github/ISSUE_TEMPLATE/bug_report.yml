@@ -1,0 +1,31 @@
+name: Fehler melden
+description: Melde einen reproduzierbaren Fehler in MiniBlock.
+title: '[Bug] '
+labels: [bug]
+body:
+  - type: input
+    id: versions
+    attributes:
+      label: Versionen
+      description: Minecraft-, Forge- und MiniBlock-Version sowie weitere beteiligte Mods.
+      placeholder: Minecraft 26.3 / Forge 66.0.9 / MiniBlock 0.1.0
+    validations:
+      required: true
+  - type: textarea
+    id: steps
+    attributes:
+      label: Schritte zum Reproduzieren
+      description: Beschreibe, wie sich der Fehler in einer Testwelt nachstellen lässt.
+    validations:
+      required: true
+  - type: textarea
+    id: expected
+    attributes:
+      label: Erwartetes und tatsächliches Verhalten
+    validations:
+      required: true
+  - type: textarea
+    id: logs
+    attributes:
+      label: Logs und Bilder
+      description: Relevante Auszüge aus latest.log oder dem Crashreport; persönliche Angaben entfernen.

@@ -1,0 +1,11 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "category": "building",
+  "ingredients": [
+    "minecraft:dirt"
+  ],
+  "result": {
+    "id": "miniblock:mini_dirt",
+    "count": 64
+  }
+}
