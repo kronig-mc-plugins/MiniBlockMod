@@ -9,7 +9,7 @@ plugins {
     id 'net.minecraftforge.gradle' version '[7.0.17,8)'
 }
 
-version = '0.1.0'
+version = '0.2.0'
 group = 'de.niklas.miniblock'
 
 // Mojang ships Java 25 to end users in 26.1+, so your mod should target Java 25.
@@ -24,6 +24,8 @@ minecraft {
             workingDir = layout.projectDirectory.dir('run')
 
             systemProperty 'eventbus.api.strictRuntimeChecks', 'true'
+            // Directory-based development runs do not read the playable JAR's manifest.
+            args '--mixin', 'miniblock.mixins.json'
         }
 
         register('client')
@@ -62,6 +64,7 @@ tasks.named('test') { useJUnitPlatform() }
 
 // Test functions and structures are loaded in development, and omitted from the playable JAR.
 tasks.named('jar') {
+    manifest.attributes('MixinConfigs': 'miniblock.mixins.json')
     exclude 'de/niklas/miniblock/gametest/**'
     exclude 'de/niklas/miniblock/player/PlayerScaleGameTests*'
     exclude 'data/miniblock/test_instance/**'

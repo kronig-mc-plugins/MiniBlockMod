@@ -1,13 +1,12 @@
 package de.niklas.miniblock.world;
 
-import de.niklas.miniblock.MiniBlockMod;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.DyeColor;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.state.BlockState;
 
-/** Stable persisted IDs: append new materials rather than reorder these entries. */
+/** The retired 0.1.0 material IDs, used only when importing old saved containers. */
 public enum MiniMaterial {
     STONE(1, "stone", Blocks.STONE),
     COBBLESTONE(2, "cobblestone", Blocks.COBBLESTONE),
@@ -29,7 +28,7 @@ public enum MiniMaterial {
     }
 
     public BlockState state() { return block.defaultBlockState(); }
-    public ItemStack stack(int count) { return new ItemStack(MiniBlockMod.MINI_ITEMS.get(this).get(), count); }
+    public ItemStack stack(int count) { return new ItemStack(block.asItem(), count); }
     public static MiniMaterial byId(int id) {
         for (var material : values()) if (material.id == id) return material;
         return null;

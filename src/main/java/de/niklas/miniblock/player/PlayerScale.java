@@ -21,12 +21,13 @@ import net.minecraftforge.event.entity.player.PlayerEvent;
 
 /** Server-owned size and crawling state. Geometry stays in ordinary world coordinates. */
 public final class PlayerScale {
-    public static final double MINI_SCALE = 1.0 / 8.0;
+    public static final double MINI_SCALE = 1.0 / 16.0;
     private static final Identifier MODIFIER_ID = Identifier.fromNamespaceAndPath("miniblock", "mini_size");
     private static final List<ScaledAttribute> SCALED_ATTRIBUTES = List.of(
             new ScaledAttribute(Attributes.SCALE, MINI_SCALE),
-            new ScaledAttribute(Attributes.MOVEMENT_SPEED, 0.25),
-            new ScaledAttribute(Attributes.JUMP_STRENGTH, 0.35),
+            new ScaledAttribute(Attributes.MOVEMENT_SPEED, MINI_SCALE),
+            new ScaledAttribute(Attributes.JUMP_STRENGTH, MINI_SCALE),
+            new ScaledAttribute(Attributes.GRAVITY, MINI_SCALE),
             new ScaledAttribute(Attributes.STEP_HEIGHT, MINI_SCALE),
             new ScaledAttribute(Attributes.BLOCK_INTERACTION_RANGE, 0.25),
             new ScaledAttribute(Attributes.ENTITY_INTERACTION_RANGE, 0.25));
@@ -38,7 +39,11 @@ public final class PlayerScale {
         PlayerNetwork.register();
         TickEvent.PlayerTickEvent.Pre.BUS.addListener(PlayerScale::beforePlayerTick);
         PlayerEvent.Clone.BUS.addListener(PlayerScale::clonePlayer);
-        PlayerEvent.PlayerLoggedInEvent.BUS.addListener(event -> resetCrawling(event.getEntity()));
+        PlayerEvent.PlayerLoggedInEvent.BUS.addListener(event -> {
+            // Upgrade saved 0.1 players and apply the new gravity modifier as one consistent set.
+            if (isMini(event.getEntity())) setMini(event.getEntity(), true);
+            resetCrawling(event.getEntity());
+        });
         PlayerEvent.PlayerRespawnEvent.BUS.addListener(event -> resetCrawling(event.getEntity()));
         PlayerEvent.PlayerChangedDimensionEvent.BUS.addListener(event -> resetCrawling(event.getEntity()));
         PlayerEvent.PlayerLoggedOutEvent.BUS.addListener(event -> CRAWLING.remove(event.getEntity().getUUID()));
@@ -77,7 +82,7 @@ public final class PlayerScale {
         return player.level().noCollision(player, largerBox.deflate(1.0E-7));
     }
 
-    private static void setMini(Player player, boolean mini) {
+    public static void setMini(Player player, boolean mini) {
         for (ScaledAttribute entry : SCALED_ATTRIBUTES) {
             AttributeInstance attribute = player.getAttribute(entry.attribute());
             if (attribute == null) {

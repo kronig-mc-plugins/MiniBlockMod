@@ -5,9 +5,9 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
 
-/** An 8 by 8 by 8 block-local grid. Material zero means empty. */
+/** A 16 by 16 by 16 block-local grid. Palette ID zero means empty. */
 public final class VoxelGrid {
-    public static final int SIZE = 8;
+    public static final int SIZE = 16;
     public static final int CELL_COUNT = SIZE * SIZE * SIZE;
 
     private final int[] materials = new int[CELL_COUNT];
@@ -16,7 +16,7 @@ public final class VoxelGrid {
     private List<VoxelBox> collisionBoxes;
     private List<MaterialBox> materialBoxes;
 
-    /** Storage order is x + 8 * (z + 8 * y). */
+    /** Storage order is x + SIZE * (z + SIZE * y). */
     public static int index(int x, int y, int z) {
         checkCoordinate(x);
         checkCoordinate(y);
@@ -185,13 +185,13 @@ public final class VoxelGrid {
 
     private static void checkCoordinate(int coordinate) {
         if (coordinate < 0 || coordinate >= SIZE) {
-            throw new IndexOutOfBoundsException("Microcell coordinate outside [0, 8): " + coordinate);
+            throw new IndexOutOfBoundsException("Microcell coordinate outside [0, " + SIZE + "): " + coordinate);
         }
     }
 
     private static void checkIndex(int index) {
         if (index < 0 || index >= CELL_COUNT) {
-            throw new IndexOutOfBoundsException("Microcell index outside [0, 512): " + index);
+            throw new IndexOutOfBoundsException("Microcell index outside [0, " + CELL_COUNT + "): " + index);
         }
     }
 
@@ -206,7 +206,7 @@ public final class VoxelGrid {
         public Snapshot(int[] materials) {
             Objects.requireNonNull(materials, "materials");
             if (materials.length != CELL_COUNT) {
-                throw new IllegalArgumentException("A snapshot requires exactly 512 cells");
+                throw new IllegalArgumentException("A snapshot requires exactly " + CELL_COUNT + " cells");
             }
             this.materials = materials.clone();
             for (int material : this.materials) checkMaterial(material);
@@ -223,6 +223,31 @@ public final class VoxelGrid {
 
         public int[] materials() {
             return materials.clone();
+        }
+
+        /** Preserves 0.1.0 geometry: each eighth-block becomes eight sixteenth-block cells. */
+        public static Snapshot expandLegacy8(int[] legacyCells) {
+            Objects.requireNonNull(legacyCells, "legacyCells");
+            if (legacyCells.length != 8 * 8 * 8) {
+                throw new IllegalArgumentException("A legacy snapshot requires exactly 512 cells");
+            }
+            int[] expanded = new int[CELL_COUNT];
+            for (int y = 0; y < 8; y++) {
+                for (int z = 0; z < 8; z++) {
+                    for (int x = 0; x < 8; x++) {
+                        int material = legacyCells[x + 8 * (z + 8 * y)];
+                        checkMaterial(material);
+                        for (int dy = 0; dy < 2; dy++) {
+                            for (int dz = 0; dz < 2; dz++) {
+                                for (int dx = 0; dx < 2; dx++) {
+                                    expanded[index(x * 2 + dx, y * 2 + dy, z * 2 + dz)] = material;
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+            return new Snapshot(expanded);
         }
 
         @Override

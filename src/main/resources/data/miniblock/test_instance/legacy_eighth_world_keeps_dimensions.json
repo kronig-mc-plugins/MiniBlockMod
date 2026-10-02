@@ -1,0 +1,7 @@
+{
+  "type": "minecraft:function",
+  "environment": "minecraft:default",
+  "function": "miniblock:legacy_eighth_world_keeps_dimensions",
+  "max_ticks": 100,
+  "structure": "miniblock:empty_3x3x3"
+}

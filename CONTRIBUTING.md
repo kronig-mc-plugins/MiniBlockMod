@@ -45,6 +45,8 @@ Die [GitHub-Actions-Prüfung](https://github.com/kronig-mc-plugins/MiniBlockMod/
 - Java-Quellcode liegt unter `src/main/java/de/niklas/miniblock/`.
 - Rezepte und andere Serverdaten liegen unter `src/main/resources/data/miniblock/`.
 - Client-Ressourcen und Übersetzungen liegen unter `src/main/resources/assets/miniblock/`.
-- Material-IDs sind Teil gespeicherter Weltdaten: Neue Materialien hinten ergänzen und bestehende IDs nicht verändern.
+- Das Weltformat speichert die Minecraft-Blockstates der Mini-Blöcke. Änderungen an Paletten und Rastergröße müssen bestehende Welten berücksichtigen; Bauwerke aus dem 8er-Raster behalten bei der Umstellung ihre Außenmaße.
+- Kleine Bauplätze verwenden normale Block-Items und Standardwerkzeuge. Material, Abbaudauer, Drops und Tool-Verschleiß gehören zur einzelnen anvisierten Zelle. Benachbarte Zellen dürfen beim Abbau nicht verloren gehen.
+- Blöcke mit Blockentities und mehrteilige Blöcke können nicht verkleinert platziert werden. Eine Erweiterung dieses Umfangs braucht passende Speicher-, Render- und Interaktionstests.
 - Änderungen an Speicherung oder Netzwerkprotokoll müssen Weltstände und Client/Server-Verhalten berücksichtigen.
 - Build-Ausgaben, lokale Welten und Laufzeit-Logs gehören nicht in einen Pull Request.
