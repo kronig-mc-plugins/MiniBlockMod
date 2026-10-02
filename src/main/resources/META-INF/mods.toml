@@ -4,10 +4,10 @@ license="MIT"
 
 [[mods]]
 modId="miniblock"
-version="0.1.0"
+version="0.2.0"
 displayName="MiniBlock"
 authors="Niklas"
-description='''Shrink to one eighth of your size and build with real miniature blocks.
+description='''Shrink to one sixteenth of your size and build with ordinary block items.
 Miniature structures keep their collision geometry at every player size.'''
 
 [[dependencies.miniblock]]

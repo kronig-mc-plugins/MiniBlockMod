@@ -1,0 +1,7 @@
+{
+  "type": "minecraft:function",
+  "environment": "minecraft:default",
+  "function": "miniblock:schema2_palette_round_trip",
+  "max_ticks": 100,
+  "structure": "miniblock:empty_3x3x3"
+}

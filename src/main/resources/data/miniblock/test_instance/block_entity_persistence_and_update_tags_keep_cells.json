@@ -1,7 +1,0 @@
-{
-  "type": "minecraft:function",
-  "environment": "minecraft:default",
-  "function": "miniblock:block_entity_persistence_and_update_tags_keep_cells",
-  "max_ticks": 100,
-  "structure": "miniblock:empty_3x3x3"
-}

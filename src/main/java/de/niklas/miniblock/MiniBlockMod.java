@@ -18,8 +18,6 @@ import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.ForgeRegistries;
 import net.minecraftforge.registries.RegistryObject;
 
-import java.util.EnumMap;
-import java.util.Map;
 import java.util.Set;
 
 @Mod(MiniBlockMod.MODID)
@@ -40,24 +38,12 @@ public final class MiniBlockMod {
             "mini_block", () -> new BlockEntityType<>(MiniBlockEntity::new, Set.of(MINI_BLOCK.get())));
     public static final RegistryObject<Item> SHRINK_DEVICE = ITEMS.register("shrink_device", () -> new ShrinkDeviceItem(
             new Item.Properties().setId(ITEMS.key("shrink_device")).stacksTo(1)));
-    public static final RegistryObject<Item> CHISEL = ITEMS.register("chisel", () -> new MiniChiselItem(
-            new Item.Properties().setId(ITEMS.key("chisel")).stacksTo(1)));
-    public static final Map<MiniMaterial, RegistryObject<Item>> MINI_ITEMS = new EnumMap<>(MiniMaterial.class);
-    static {
-        for (var material : MiniMaterial.values()) {
-            String name = "mini_" + material.path;
-            MINI_ITEMS.put(material, ITEMS.register(name, () -> new MiniBlockItem(material,
-                    new Item.Properties().setId(ITEMS.key(name)))));
-        }
-    }
     public static final RegistryObject<CreativeModeTab> MINI_TAB = TABS.register("miniblock", () -> CreativeModeTab.builder()
             .title(Component.translatable("itemGroup.miniblock"))
             .withTabsBefore(CreativeModeTabs.BUILDING_BLOCKS)
             .icon(() -> SHRINK_DEVICE.get().getDefaultInstance())
             .displayItems((parameters, output) -> {
                 output.accept(SHRINK_DEVICE.get());
-                output.accept(CHISEL.get());
-                MINI_ITEMS.values().forEach(item -> output.accept(item.get()));
             }).build());
 
     public MiniBlockMod(FMLJavaModLoadingContext context) {
@@ -67,5 +53,6 @@ public final class MiniBlockMod {
         BLOCK_ENTITIES.register(bus);
         TABS.register(bus);
         PlayerScale.register();
+        LegacyItems.register();
     }
 }

@@ -1,0 +1,7 @@
+{
+  "type": "minecraft:function",
+  "environment": "minecraft:default",
+  "function": "miniblock:partial_block_shapes_keep_real_empty_space",
+  "max_ticks": 100,
+  "structure": "miniblock:empty_3x3x3"
+}

@@ -2,6 +2,7 @@ package de.niklas.miniblock.world;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.block.BaseEntityBlock;
 import net.minecraft.world.level.block.RenderShape;
@@ -21,23 +22,29 @@ public final class MiniBlock extends BaseEntityBlock {
     @Override
     public BlockEntity newBlockEntity(BlockPos pos, BlockState state) { return new MiniBlockEntity(pos, state); }
 
-    private static VoxelShape shape(BlockGetter level, BlockPos pos) {
-        return level.getBlockEntity(pos) instanceof MiniBlockEntity entity ? entity.collisionShape() : Shapes.empty();
-    }
-
     @Override
     protected VoxelShape getShape(BlockState state, BlockGetter level, BlockPos pos, CollisionContext context) {
-        return shape(level, pos);
+        return level.getBlockEntity(pos) instanceof MiniBlockEntity entity ? entity.outlineShape() : Shapes.empty();
     }
 
     @Override
     protected VoxelShape getCollisionShape(BlockState state, BlockGetter level, BlockPos pos, CollisionContext context) {
-        return shape(level, pos);
+        return level.getBlockEntity(pos) instanceof MiniBlockEntity entity ? entity.collisionShape() : Shapes.empty();
     }
 
     @Override
     protected VoxelShape getBlockSupportShape(BlockState state, BlockGetter level, BlockPos pos) {
-        return shape(level, pos);
+        return level.getBlockEntity(pos) instanceof MiniBlockEntity entity ? entity.collisionShape() : Shapes.empty();
+    }
+
+    @Override
+    protected VoxelShape getVisualShape(BlockState state, BlockGetter level, BlockPos pos, CollisionContext context) {
+        return getCollisionShape(state, level, pos, context);
+    }
+
+    @Override
+    protected float getDestroyProgress(BlockState state, Player player, BlockGetter level, BlockPos pos) {
+        return MiniBlockInteractions.destroyProgress(player, level, pos);
     }
 
     @Override
