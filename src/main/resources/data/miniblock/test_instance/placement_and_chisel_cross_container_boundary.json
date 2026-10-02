@@ -1,0 +1,7 @@
+{
+  "type": "minecraft:function",
+  "environment": "minecraft:default",
+  "function": "miniblock:placement_and_chisel_cross_container_boundary",
+  "max_ticks": 100,
+  "structure": "miniblock:empty_3x3x3"
+}

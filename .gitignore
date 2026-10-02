@@ -25,4 +25,4 @@ run-data
 
 # Files from Forge MDK
 forge_README.txt
-forge*changelog.txt
+/forge*changelog.txt

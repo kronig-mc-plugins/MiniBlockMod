@@ -1,0 +1,11 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "category": "building",
+  "ingredients": [
+    "minecraft:oak_planks"
+  ],
+  "result": {
+    "id": "miniblock:mini_oak_planks",
+    "count": 64
+  }
+}
