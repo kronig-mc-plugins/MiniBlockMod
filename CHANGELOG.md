@@ -2,6 +2,21 @@
 
 Änderungen an MiniBlock. Die Versionsnummern beziehen sich auf die Mod.
 
+## 0.2.1 — 2026-10-03
+
+### Behoben
+
+- Creative-Flug beim kleinen Spieler: Auf- und Absteigen verwenden jetzt ebenso wie horizontaler Flug 1/16 der normalen Geschwindigkeit. Sprint-Flug und vorhandene Fluggeschwindigkeitseinstellungen bleiben erhalten.
+- Braunes Reinflackern beim Sprinten: Die bisher normal großen Bodenpartikel erschienen fast auf Augenhöhe des kleinen Spielers. Die Sprintpartikel berücksichtigen jetzt die Spielergröße.
+
+### Prüfung
+
+- Build erfolgreich, **28 Unit-Tests und 15 Minecraft-GameTests bestanden**.
+- Regressionstest für normale und schnelle Creative-Flugbahnen, unveränderte Ability-Einstellungen und die Rückkehr zur normalen Geschwindigkeit nach dem Vergrößern.
+- Regressionstests für Partikelabstand zur kleinen Kamera, maximale Staubflugbahn und begrenzte Skalierung ausschließlich während der Sprintpartikelerzeugung.
+- Entwicklungsclient startet erfolgreich; alle neuen Flug- und Partikel-Mixins wurden geladen und geprüft.
+- Vollständiger manueller Spieltest in MultiMC steht noch aus.
+
 ## 0.2.0 — 2026-10-02
 
 ### Geändert

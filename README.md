@@ -2,7 +2,7 @@
 
 Schrumpfe mit dem **Shrinkling** auf ein Sechzehntel deiner Größe und baue mit deinen normalen Minecraft-Blöcken. Derselbe Bruchstein wird groß als normaler Block und klein als Mini-Block platziert. Die kleinen Bauwerke behalten ihre echten Maße, wenn du wieder groß wirst: Ein niedriger Durchgang lässt dich nur hindurch, wenn deine aktuelle Körperhaltung hineinpasst.
 
-Eine Minecraft-Java-Mod für **26.3**, **Forge 66.0.9** und **Java 25**. Aktuelle Mod-Version: **0.2.0**.
+Eine Minecraft-Java-Mod für **26.3**, **Forge 66.0.9** und **Java 25**. Aktuelle Mod-Version: **0.2.1**.
 
 [![Build](https://github.com/kronig-mc-plugins/MiniBlockMod/actions/workflows/build.yml/badge.svg)](https://github.com/kronig-mc-plugins/MiniBlockMod/actions/workflows/build.yml)
 
@@ -21,7 +21,7 @@ Eine Minecraft-Java-Mod für **26.3**, **Forge 66.0.9** und **Java 25**. Aktuell
 
 1. [Forge 66.0.9 für Minecraft 26.3](https://files.minecraftforge.net/net/minecraftforge/forge/index_26.3.html) installieren.
 2. Die Mod mit den unten beschriebenen Build-Befehlen erstellen. Nach einem erfolgreichen [GitHub-Actions-Build](https://github.com/kronig-mc-plugins/MiniBlockMod/actions/workflows/build.yml) ist die JAR auch als Build-Artefakt des jeweiligen Laufs verfügbar.
-3. `build/libs/miniblock-0.2.0.jar` in den `mods`-Ordner deiner Forge-Installation kopieren.
+3. `build/libs/miniblock-0.2.1.jar` in den `mods`-Ordner deiner Forge-Installation kopieren und die bisherige MiniBlock-JAR entfernen.
 4. Minecraft mit dieser Forge-Installation starten. Im Kreativmodus findest du den Shrinkling im Reiter **MiniBlock**; Baumaterial und Werkzeuge nimmst du aus den normalen Minecraft-Reitern.
 
 Auf einem Server brauchen Server und Mitspieler dieselbe Mod-Version und eine passende Forge-Installation. Minecraft Java 26.3 benötigt Java 25.
@@ -48,7 +48,7 @@ Beispiel: Ein Gang mit **10 Mini-Blöcken freier Breite (0,625 Block)** und **10
 
 Normale Block-Items mit statischen Blockmodellen können verkleinert platziert werden, beispielsweise Bruchstein, Holz, Glas, Stufen und Treppen. Die Blockform wird mit verkleinert. Funktionierende Mini-Blockmaschinen, Redstone-Schaltungen und Flüssigkeiten sind nicht Teil dieser Version. Blöcke mit eigenen Blockentities, etwa Kisten und Öfen, sowie mehrteilige Blöcke wie Türen, Betten und hohe Pflanzen werden beim kleinen Platzieren abgewiesen: Das Item bleibt im Inventar und kann normal groß platziert werden. Mini-Bauwerke lassen sich nicht mit Kolben verschieben.
 
-Kriechen endet erst dann vollständig, wenn wieder Platz zum Aufstehen ist. Kleine Spieler bewegen sich langsamer, springen niedriger und haben weniger Reichweite. Sprungimpuls, Schwerkraft, Sprint-Sprung und Luftsteuerung sind gemeinsam skaliert; der Sprung dauert wie bei normaler Größe. Die Kamera passt Clipping-Abstand und Wackeln an die kleinen Maße an und übernimmt beim Größenwechsel sofort die neue Augenhöhe.
+Kriechen endet erst dann vollständig, wenn wieder Platz zum Aufstehen ist. Kleine Spieler bewegen sich langsamer, springen niedriger und haben weniger Reichweite. Sprungimpuls, Schwerkraft, Sprint-Sprung und Luftsteuerung sind gemeinsam skaliert; der Sprung dauert wie bei normaler Größe. Creative-Flug ist horizontal sowie beim Auf- und Absteigen auf 1/16 skaliert; Sprint-Flug behält seinen normalen Geschwindigkeitsfaktor. Die Kamera passt Clipping-Abstand und Wackeln an die kleinen Maße an und übernimmt beim Größenwechsel sofort die neue Augenhöhe.
 
 ## Herstellung
 
@@ -88,7 +88,7 @@ Die Unit-Tests prüfen Rastergeometrie, Hohlräume, Kriechgänge, Koordinaten un
 
 `build` kompiliert die Mod, führt die Unit-Tests aus und erzeugt die JAR in `build/libs/`. `runGameTestServer` startet die Minecraft-Integrationstests. `runClient` startet einen Entwicklungsclient. Unit-Testberichte liegen unter `build/reports/tests/test/`.
 
-Prüfstand von **0.2.0** am 2. Oktober 2026: Build erfolgreich, **25 Unit-Tests und 14 Minecraft-GameTests bestanden**. Die Tests vergleichen unter anderem 18 echte Sprungticks mit Vanilla, prüfen Kamerageometrie bei verschiedenen Sichtwinkeln und Bildschirmformaten und verwenden die normalen Block-Item- und Server-Abbaupfade. Clientstart, Mod-Ressourcen und Kamera-Mixins wurden geprüft. Eine vollständige manuelle Prüfung von Sprunggefühl und Bedienung in einer Spielwelt steht noch aus.
+Prüfstand von **0.2.1** am 3. Oktober 2026: Build erfolgreich, **28 Unit-Tests und 15 Minecraft-GameTests bestanden**. Die Tests vergleichen unter anderem 18 echte Sprungticks sowie normale und schnelle Creative-Flugbahnen mit Vanilla, prüfen Kamerageometrie und Sprintstaub-Abstände und verwenden die normalen Block-Item- und Server-Abbaupfade. Eine vollständige manuelle Prüfung von Bild, Fluggefühl und Bedienung in einer Spielwelt steht noch aus. Auf- und Absteigen sowie die Partikelerzeugung verwenden reine Client-Pfade; ihre Mixins werden zusätzlich beim Entwicklungsclientstart geladen und geprüft.
 
 ## Branches und Mitarbeit
 
@@ -105,12 +105,13 @@ Die [GitHub-Actions-Prüfung](https://github.com/kronig-mc-plugins/MiniBlockMod/
 1. Im Kreativmodus den Shrinkling, normale Bruchsteine, Glas, Stufen, Treppen und eine normale Spitzhacke nehmen.
 2. Einen Bruchstein normal groß platzieren. Mit dem Gerät klein machen und mit demselben Item mehrere Mini-Blöcke nebeneinander platzieren.
 3. Mit Linksklick und Spitzhacke einen einzelnen Mini-Block abbauen: Die Nachbarblöcke müssen erhalten bleiben. Im Überlebensmodus Beute, Abbaudauer, Werkzeugverschleiß und Itemverbrauch prüfen.
-4. Klein an eine normale Wand und eine Mini-Wand laufen und springen. Die Kamera darf keine Sicht durch die Wand geben; Sprünge müssen gleichmäßig verlaufen.
+4. Klein auf Erde laufen und sprinten, anschließend an eine normale Wand und eine Mini-Wand laufen und springen. Erdpartikel dürfen das Bild nicht braun überdecken. Die Kamera darf keine Sicht durch die Wand geben; Sprünge müssen gleichmäßig verlaufen.
 5. Ins Freie gehen und wieder groß machen: Mini-Wand und Blockformen müssen unverändert bleiben. Auch groß muss sich eine einzelne Mini-Zelle anvisieren und abbauen lassen.
 6. Einen Gang mit zehn Zellen freier Breite und zehn Zellen freier Höhe bauen. Mit C hinein kriechen; stehend darf der Spieler nicht hindurchgehen.
 7. In einem zu engen Raum groß machen: Das Gerät muss ablehnen, ohne den Spieler zu verschieben.
 8. Eine Kiste oder Tür klein platzieren versuchen: Die Platzierung muss abgewiesen werden, ohne ein Item zu verbrauchen.
 9. Welt speichern und erneut laden: Bauwerk und kleine Spielergröße müssen erhalten bleiben. Ein Bauwerk aus 0.1.0 muss dieselben Außenmaße behalten.
+10. Im Kreativmodus klein fliegen: Horizontal, aufwärts und abwärts muss die Geschwindigkeit zur kleinen Größe passen. Sprint-Flug muss weiterhin schneller sein. Nach dem Großwerden muss wieder die normale Fluggeschwindigkeit gelten.
 
 Offizielle Versionsgrundlagen: [Minecraft 26.3](https://feedback.minecraft.net/hc/en-us/articles/48913133328013-Minecraft-Java-Edition-26-3), [Forge 26.3](https://files.minecraftforge.net/net/minecraftforge/forge/index_26.3.html).
 

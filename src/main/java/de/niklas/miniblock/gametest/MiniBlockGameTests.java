@@ -45,6 +45,7 @@ public final class MiniBlockGameTests {
             functions.register("changed_microcell_updates_attached_torch", MiniBlockGameTests::changedMicrocellUpdatesAttachedTorch);
             functions.register("miniature_player_can_grow_only_when_current_pose_fits", PlayerScaleGameTests::miniaturePlayerCanGrowOnlyWhenCurrentPoseFits);
             functions.register("miniature_jump_preserves_native_arc_and_sprint_control", PlayerScaleGameTests::miniatureJumpPreservesNativeArcAndSprintControl);
+            functions.register("creative_flight_preserves_scale_and_native_ability_settings", PlayerScaleGameTests::creativeFlightPreservesScaleAndNativeAbilitySettings);
             functions.register("schema2_palette_round_trip", MiniStateGameTests::schema2PaletteRoundTrip);
             functions.register("legacy_eighth_world_keeps_dimensions", MiniStateGameTests::legacyEighthWorldKeepsDimensions);
             functions.register("invalid_palette_entries_keep_later_ids", MiniStateGameTests::invalidPaletteEntriesKeepLaterIds);

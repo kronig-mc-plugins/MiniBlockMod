@@ -39,9 +39,13 @@ public final class MiniBlockClient {
 
     @SubscribeEvent
     public static void registerRenderers(EntityRenderersEvent.RegisterRenderers event) {
-        // A menu-only development smoke test must also validate the gameplay-only mining mixin.
-        if (!FMLLoader.isProduction() && !MiniMiningState.class.isAssignableFrom(MultiPlayerGameMode.class))
-            throw new IllegalStateException("MiniBlock client mining mixin was not applied");
+        // Also load gameplay-only targets so a development menu smoke catches invalid client injections.
+        if (!FMLLoader.isProduction()) {
+            if (!MiniMiningState.class.isAssignableFrom(MultiPlayerGameMode.class))
+                throw new IllegalStateException("MiniBlock client mining mixin was not applied");
+            net.minecraft.client.player.LocalPlayer.class.getDeclaredConstructors();
+            net.minecraft.client.particle.TerrainParticle.class.getDeclaredConstructors();
+        }
         event.registerBlockEntityRenderer(MiniBlockMod.MINI_BLOCK_ENTITY.get(), MiniBlockRenderer::new);
     }
 

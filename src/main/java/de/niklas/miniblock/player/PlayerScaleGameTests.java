@@ -129,4 +129,66 @@ public final class PlayerScaleGameTests {
                 "Growing must restore the ordinary jump impulse");
         helper.succeed();
     }
+
+    @GameTest
+    public static void creativeFlightPreservesScaleAndNativeAbilitySettings(GameTestHelper helper) {
+        var normal = helper.makeMockPlayer(GameType.CREATIVE);
+        var miniature = helper.makeMockPlayer(GameType.CREATIVE);
+        Vec3 start = helper.absoluteVec(new Vec3(1.5, 20.0, 1.5));
+        normal.setYRot(0.0F);
+        miniature.setYRot(0.0F);
+        normal.getAbilities().flying = true;
+        miniature.getAbilities().flying = true;
+        // Exercise a custom ability speed too: resizing must preserve settings from servers and other mods.
+        float abilitySpeed = 0.085F;
+        normal.getAbilities().setFlyingSpeed(abilitySpeed);
+        miniature.getAbilities().setFlyingSpeed(abilitySpeed);
+        PlayerScale.setMini(miniature, true);
+
+        double ordinaryDistance = 0.0;
+        for (boolean sprinting : new boolean[] {false, true}) {
+            normal.setPos(start.x, start.y, start.z);
+            miniature.setPos(start.x, start.y, start.z);
+            normal.setDeltaMovement(Vec3.ZERO);
+            miniature.setDeltaMovement(Vec3.ZERO);
+            normal.setOnGround(false);
+            miniature.setOnGround(false);
+            normal.setSprinting(sprinting);
+            miniature.setSprinting(sprinting);
+            for (int tick = 0; tick < 12; tick++) {
+                normal.travel(new Vec3(1.0, 0.0, 0.0));
+                miniature.travel(new Vec3(1.0, 0.0, 0.0));
+                helper.assertTrue(Math.abs(miniature.getDeltaMovement().x
+                                - normal.getDeltaMovement().x / 16.0) < 1.0E-7,
+                        "Actual Creative flight velocity must shrink once, including sprint flight: tick " + tick
+                                + ", sprinting=" + sprinting);
+                helper.assertTrue(Math.abs((miniature.getX() - start.x)
+                                - (normal.getX() - start.x) / 16.0) < 1.0E-6,
+                        "Every actual Creative flight position must advance at one-sixteenth speed: tick " + tick
+                                + ", sprinting=" + sprinting);
+            }
+            double distance = normal.getX() - start.x;
+            if (!sprinting) {
+                ordinaryDistance = distance;
+            } else {
+                helper.assertTrue(Math.abs(distance - ordinaryDistance * 2.0) < 1.0E-6,
+                        "Vanilla's double-speed sprint flight must survive miniature scaling");
+            }
+            helper.assertTrue(miniature.getAbilities().getFlyingSpeed() == abilitySpeed,
+                    "Resizing and moving must not mutate the saved or networked vanilla ability speed");
+        }
+
+        PlayerScale.setMini(miniature, false);
+        normal.setDeltaMovement(Vec3.ZERO);
+        miniature.setDeltaMovement(Vec3.ZERO);
+        normal.setOnGround(false);
+        miniature.setOnGround(false);
+        normal.travel(new Vec3(1.0, 0.0, 0.0));
+        miniature.travel(new Vec3(1.0, 0.0, 0.0));
+        helper.assertTrue(Math.abs(miniature.getDeltaMovement().x - normal.getDeltaMovement().x) < 1.0E-7,
+                "Growing must immediately restore native Creative flight speed");
+        helper.assertTrue(miniature.getAbilities().getFlyingSpeed() == abilitySpeed,
+                "Growing must retain the original custom ability speed");
+        helper.succeed();
+    }
 }

@@ -10,6 +10,9 @@
     "MiniLivingMovementMixin"
   ],
   "client": [
+    "LocalPlayerMovementMixin",
+    "MiniSprintParticleMixin",
+    "MiniTerrainParticleMixin",
     "MultiPlayerGameModeMixin",
     "MiniBlockOutlineMixin",
     "MiniCameraMixin"
