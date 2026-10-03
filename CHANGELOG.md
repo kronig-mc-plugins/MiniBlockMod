@@ -2,6 +2,43 @@
 
 Änderungen an MiniBlock. Die Versionsnummern beziehen sich auf die Mod.
 
+## 0.3.0 — 2026-10-03
+
+### Hinzugefügt
+
+- Automatische öffentliche GitHub-Releases: Neue Versionen auf `main` erhalten nach bestandenem Build und Tests eine JAR, SHA-256-Prüfsumme und Versionshinweise.
+- Allgemeine Anpassung der Minecraft-Partikeldarstellung an die kleine Spielergröße, einschließlich Abbau, Trankeffekten und bereits aktiven Partikeln beim Größenwechsel.
+- Größenanpassung der Modellpartikel für Item-Pickup und Elder Guardian sowie Vererbung der Quellgröße an später erzeugte Kindpartikel.
+- Materialbezogene Lauf-, Sprint-, Lande- und Abbaueffekte auf einzelnen Mini-Blöcken, einschließlich Teilformen wie Stufen.
+
+### Behoben
+
+- Abbaupartikel behalten Material, Farbposition und Größe auch nach dem Entfernen der letzten Mini-Zelle.
+- Trank-, Ess-, Wasser- und andere körpergebundene Partikel berücksichtigen die Quellgröße des kleinen Spielers und bleiben nach dessen Vergrößern passend skaliert.
+- Wasserblasen, animierte Wasserpartikel und der erste Bewegungsschritt von Krit-Partikeln berücksichtigen ebenfalls die Quellgröße.
+
+### Prüfung
+
+- Build erfolgreich, **35 Unit-Tests und 17 Minecraft-GameTests bestanden**.
+- Regressionen für aktive und animierte Partikel beim Größenwechsel, Wasserpartikelbewegung, native Materialoberflächen und die Übertragung von Abbau- und Trankoptionen.
+- Entwicklungsclient lädt die Partikelgruppen und ihre neuen Mixins; ein vollständiger manueller Spieltest in MultiMC steht noch aus.
+- Release-Workflow für Versionsauswertung, JAR, Changelog-Auszug, SHA-256 und den Erhalt bereits veröffentlichter Versionen geprüft.
+
+## 0.2.1 — 2026-10-03
+
+### Behoben
+
+- Creative-Flug beim kleinen Spieler: Auf- und Absteigen verwenden jetzt ebenso wie horizontaler Flug 1/16 der normalen Geschwindigkeit. Sprint-Flug und vorhandene Fluggeschwindigkeitseinstellungen bleiben erhalten.
+- Braunes Reinflackern beim Sprinten: Die bisher normal großen Bodenpartikel erschienen fast auf Augenhöhe des kleinen Spielers. Die Sprintpartikel berücksichtigen jetzt die Spielergröße.
+
+### Prüfung
+
+- Build erfolgreich, **28 Unit-Tests und 15 Minecraft-GameTests bestanden**.
+- Regressionstest für normale und schnelle Creative-Flugbahnen, unveränderte Ability-Einstellungen und die Rückkehr zur normalen Geschwindigkeit nach dem Vergrößern.
+- Regressionstests für Partikelabstand zur kleinen Kamera, maximale Staubflugbahn und begrenzte Skalierung ausschließlich während der Sprintpartikelerzeugung.
+- Entwicklungsclient startet erfolgreich; alle neuen Flug- und Partikel-Mixins wurden geladen und geprüft.
+- Vollständiger manueller Spieltest in MultiMC steht noch aus.
+
 ## 0.2.0 — 2026-10-02
 
 ### Geändert

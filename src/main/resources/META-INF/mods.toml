@@ -4,7 +4,7 @@ license="MIT"
 
 [[mods]]
 modId="miniblock"
-version="0.2.0"
+version="0.3.0"
 displayName="MiniBlock"
 authors="Niklas"
 description='''Shrink to one sixteenth of your size and build with ordinary block items.

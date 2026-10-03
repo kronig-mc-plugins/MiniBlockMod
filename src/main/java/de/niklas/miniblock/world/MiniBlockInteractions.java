@@ -3,10 +3,10 @@ package de.niklas.miniblock.world;
 import de.niklas.miniblock.MiniBlockMod;
 import de.niklas.miniblock.core.VoxelGrid;
 import de.niklas.miniblock.player.PlayerScale;
+import de.niklas.miniblock.player.MiniSurfaceEffects;
+import de.niklas.miniblock.player.PlayerNetwork;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.component.DataComponents;
-import net.minecraft.core.particles.BlockParticleOption;
-import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundSource;
@@ -93,6 +93,10 @@ public final class MiniBlockInteractions {
         Vec3 center = center(cell);
         level.playSound(null, center.x, center.y, center.z, sound.getPlaceSound(), SoundSource.BLOCKS,
                 0.35F, sound.getPitch());
+        Vec3 placedParticleOrigin = placedShape.isEmpty() ? center : placedShape.bounds().move(pos).getCenter();
+        if (state.shouldSpawnTerrainParticles() && level instanceof ServerLevel server) PlayerNetwork.sendParticles(server,
+                MiniSurfaceEffects.blockBurst(state, pos, placedParticleOrigin, (float) CELL_SIZE, 4,
+                        new Vec3(CELL_SIZE * 0.15, CELL_SIZE * 0.15, CELL_SIZE * 0.15)));
         level.gameEvent(GameEvent.BLOCK_PLACE, center, GameEvent.Context.of(player, state));
         return InteractionResult.SUCCESS_SERVER;
     }
@@ -123,6 +127,8 @@ public final class MiniBlockInteractions {
                 || player.blockActionRestricted(level, pos, mode)
                 || !(level.getBlockEntity(pos) instanceof MiniBlockEntity mini)) return false;
         BlockState state = mini.stateAt(cell.x(), cell.y(), cell.z());
+        var sourceShape = mini.cellShape(cell.x(), cell.y(), cell.z(), false);
+        Vec3 particleOrigin = sourceShape.isEmpty() ? center(cell) : sourceShape.bounds().move(pos).getCenter();
         ItemStack tool = player.getMainHandItem();
         if (state.getDestroySpeed(level, pos) < 0.0F && !player.getAbilities().instabuild) return false;
         if (!tool.canDestroyBlock(state, level, pos, player) || tool.onBlockStartBreak(pos, player)
@@ -151,8 +157,8 @@ public final class MiniBlockInteractions {
         }
         var sound = state.getSoundType(level, pos, player);
         level.playSound(null, center.x, center.y, center.z, sound.getBreakSound(), SoundSource.BLOCKS, 0.35F, sound.getPitch());
-        level.sendParticles(new BlockParticleOption(ParticleTypes.BLOCK, state), center.x, center.y, center.z,
-                8, CELL_SIZE * 0.3, CELL_SIZE * 0.3, CELL_SIZE * 0.3, 0.01);
+        if (state.shouldSpawnTerrainParticles()) PlayerNetwork.sendParticles(level, MiniSurfaceEffects.blockBurst(state, pos, particleOrigin,
+                (float) CELL_SIZE, 8, new Vec3(CELL_SIZE * 0.3, CELL_SIZE * 0.3, CELL_SIZE * 0.3)));
         level.gameEvent(GameEvent.BLOCK_DESTROY, center, GameEvent.Context.of(player, state));
         return true;
     }

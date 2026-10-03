@@ -7,9 +7,25 @@
     "ServerPlayerGameModeMixin",
     "BlockItemMixin",
     "PlayerMovementMixin",
-    "MiniLivingMovementMixin"
+    "MiniLivingMovementMixin",
+    "MiniLivingParticleSourceMixin",
+    "MiniLandingParticleSourceMixin",
+    "MiniSplashParticleSourceMixin"
   ],
   "client": [
+    "LocalPlayerMovementMixin",
+    "MiniSprintParticleMixin",
+    "MiniParticleSourceMixin",
+    "MiniParticleFactoryMixin",
+    "MiniParticleTickMixin",
+    "MiniTrackingEmitterMixin",
+    "MiniBubbleParticleMixin",
+    "MiniWakeParticleMixin",
+    "MiniCritParticleMixin",
+    "MiniQuadParticleMixin",
+    "MiniPickupParticleMixin",
+    "MiniGuardianParticleMixin",
+    "MiniBlockParticleSourceMixin",
     "MultiPlayerGameModeMixin",
     "MiniBlockOutlineMixin",
     "MiniCameraMixin"

@@ -1,0 +1,7 @@
+{
+  "environment": "minecraft:default",
+  "structure": "miniblock:empty_3x3x3",
+  "max_ticks": 100,
+  "type": "minecraft:function",
+  "function": "miniblock:creative_flight_preserves_scale_and_native_ability_settings"
+}
