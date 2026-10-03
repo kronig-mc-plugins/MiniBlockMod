@@ -19,6 +19,8 @@ jobs:
     name: Java 25 / Forge 26.3
     runs-on: ubuntu-latest
     timeout-minutes: 30
+    outputs:
+      mod-version: ${{ steps.version.outputs.mod-version }}
     steps:
       - name: Checkout
         uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
@@ -33,11 +35,20 @@ jobs:
       - name: Build, unit tests and Minecraft integration tests
         run: ./gradlew --no-daemon build runGameTestServer
 
+      - name: Read and validate mod version
+        id: version
+        shell: bash
+        run: |
+          mod_version="$(sed -n "s/^version = '\([^']*\)'$/\1/p" build.gradle)"
+          [[ "$mod_version" =~ ^[0-9]+\.[0-9]+\.[0-9]+$ ]]
+          test -f "build/libs/miniblock-$mod_version.jar"
+          echo "mod-version=$mod_version" >> "$GITHUB_OUTPUT"
+
       - name: Upload mod JAR
         uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
         with:
           name: MiniBlockMod-${{ github.sha }}
-          path: build/libs/*.jar
+          path: build/libs/miniblock-${{ steps.version.outputs.mod-version }}.jar
           if-no-files-found: error
           retention-days: 30
 
@@ -52,3 +63,50 @@ jobs:
             run/logs/
           if-no-files-found: ignore
           retention-days: 14
+
+  release:
+    name: Publish public mod download
+    needs: build
+    if: github.ref == 'refs/heads/main' && github.event_name != 'pull_request'
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    permissions:
+      contents: write
+    steps:
+      - name: Checkout release notes
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+
+      - name: Download tested mod JAR
+        uses: actions/download-artifact@3e5f45b2cfb9172054b4087a40e8e0b5a5461e7c # v8
+        with:
+          name: MiniBlockMod-${{ github.sha }}
+          path: release
+
+      - name: Publish a new version once
+        shell: bash
+        env:
+          GH_TOKEN: ${{ github.token }}
+          GH_REPO: ${{ github.repository }}
+          MOD_VERSION: ${{ needs.build.outputs.mod-version }}
+        run: |
+          tag="v$MOD_VERSION"
+          if gh release view "$tag" > /dev/null 2>&1; then
+            echo "::notice::Release $tag already exists; its published files are preserved."
+            exit 0
+          fi
+          jar="release/miniblock-$MOD_VERSION.jar"
+          test -s "$jar"
+          awk -v version="$MOD_VERSION" '
+            /^## / { if (found) exit; if ($2 == version) found=1 }
+            found { print }
+          ' CHANGELOG.md > release-notes.md
+          test -s release-notes.md
+          (
+            cd release
+            sha256sum "miniblock-$MOD_VERSION.jar" > "miniblock-$MOD_VERSION.jar.sha256"
+          )
+          gh release create "$tag" "$jar" "$jar.sha256" \
+            --target "$GITHUB_SHA" --title "MiniBlock $MOD_VERSION" \
+            --notes-file release-notes.md --latest

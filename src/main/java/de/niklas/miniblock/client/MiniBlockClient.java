@@ -43,8 +43,23 @@ public final class MiniBlockClient {
         if (!FMLLoader.isProduction()) {
             if (!MiniMiningState.class.isAssignableFrom(MultiPlayerGameMode.class))
                 throw new IllegalStateException("MiniBlock client mining mixin was not applied");
+            if (!ParticleScaleAccess.class.isAssignableFrom(net.minecraft.client.particle.Particle.class))
+                throw new IllegalStateException("MiniBlock particle source mixin was not applied");
             net.minecraft.client.player.LocalPlayer.class.getDeclaredConstructors();
-            net.minecraft.client.particle.TerrainParticle.class.getDeclaredConstructors();
+            net.minecraft.client.particle.ParticleEngine.class.getDeclaredMethods();
+            net.minecraft.client.particle.SingleQuadParticle.class.getDeclaredMethods();
+            net.minecraft.client.particle.ParticleGroup.class.getDeclaredMethods();
+            net.minecraft.client.particle.TrackingEmitter.class.getDeclaredMethods();
+            net.minecraft.client.particle.BubbleParticle.class.getDeclaredMethods();
+            net.minecraft.client.particle.WakeParticle.class.getDeclaredMethods();
+            net.minecraft.client.particle.CritParticle.class.getDeclaredConstructors();
+            try {
+                for (String target : List.of("net.minecraft.client.particle.ItemPickupParticleGroup$State",
+                        "net.minecraft.client.particle.ElderGuardianParticleGroup$ElderGuardianParticleRenderState"))
+                    Class.forName(target, false, MiniBlockClient.class.getClassLoader()).getDeclaredMethods();
+            } catch (ClassNotFoundException exception) {
+                throw new IllegalStateException("MiniBlock particle model target is missing", exception);
+            }
         }
         event.registerBlockEntityRenderer(MiniBlockMod.MINI_BLOCK_ENTITY.get(), MiniBlockRenderer::new);
     }
